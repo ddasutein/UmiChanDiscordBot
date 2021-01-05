@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Mamahiru.Core.Modules.BMS
 {
-    public class LoadConfig
+    public class JsonConfig
     {
         private static string fileName = "config.json";
         private static bool firstRun = !File.Exists(fileName);
