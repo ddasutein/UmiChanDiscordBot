@@ -10,8 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Modules\IO\" />
     <Folder Include="Modules\GameSDK\" />
+    <Folder Include="Modules\IO\" />
     <Folder Include="Modules\Permissions\" />
     <Folder Include="Modules\Scripting\" />
   </ItemGroup>

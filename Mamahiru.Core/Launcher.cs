@@ -15,28 +15,27 @@ namespace Mamahiru.Core
 
         public static async Task MainAsync()
         {
-            LoadConfig.LoadJSON();
+            JsonConfig.LoadJSON();
             Console.WriteLine("DISCORD Bot name: Mamahiru");
             Console.WriteLine("VERSION: 0.0.1-alpha");
 
             _client = new DiscordSocketClient();
+            _client.MessageReceived += CommandHandler.MessageReceived;
             _client.Log += Log;
 
-            if (LoadConfig.settings.token == null)
+            if (JsonConfig.settings.token == null)
             {
                 Console.WriteLine("token empty");
                 Console.ReadKey();
                 return;
             }
 
-            string token = LoadConfig.settings.token;
+            string token = JsonConfig.settings.token;
             await _client.LoginAsync(TokenType.Bot, token);
             await _client.StartAsync();
             await Task.Delay(-1);
 
-            LoadConfig.LoadJSON();
-            LoadConfig.settings.token = "test";
-            LoadConfig.SaveJson();
+            JsonConfig.SaveJson();
 
         }
 
