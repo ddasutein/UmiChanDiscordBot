@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
 using Mamahiru.Core.Modules.BMS;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Mamahiru.Core
 {
@@ -20,7 +21,7 @@ namespace Mamahiru.Core
             Console.WriteLine("VERSION: 0.0.1-alpha");
 
             _client = new DiscordSocketClient();
-            _client.MessageReceived += CommandHandler.MessageReceived;
+            //_client.MessageReceived += CommandHandler.MessageReceived;
             _client.Log += Log;
 
             if (JsonConfig.settings.token == null)
@@ -29,6 +30,11 @@ namespace Mamahiru.Core
                 Console.ReadKey();
                 return;
             }
+
+            var services = new ServiceCollection().AddSingleton<CommandHandler>();
+
+            var serviceProvider = services.BuildServiceProvider();
+            serviceProvider.GetRequiredService<CommandHandler>();
 
             string token = JsonConfig.settings.token;
             await _client.LoginAsync(TokenType.Bot, token);
