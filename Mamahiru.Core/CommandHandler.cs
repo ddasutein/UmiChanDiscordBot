@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Discord;
+using System.Reflection;
 
 namespace Mamahiru.Core
 {
@@ -11,11 +12,11 @@ namespace Mamahiru.Core
     {
         private static string argumentStr = "?";
 
-        private DiscordShardedClient discordShardedClient;
-        private CommandService commandService;
+        private static DiscordShardedClient discordShardedClient;
+        private static CommandService commandService;
 
-        private readonly DiscordSocketClient discordSocketClient;
-        private readonly IServiceProvider services;
+        //private static DiscordSocketClient discordSocketClient;
+        private static IServiceProvider services;
 
         public CommandHandler(IServiceProvider serviceProvider)
         {
@@ -24,44 +25,69 @@ namespace Mamahiru.Core
             discordShardedClient = serviceProvider.GetRequiredService<DiscordShardedClient>();
 
             commandService.CommandExecuted += CommandExecutedAsync;
-            discordSocketClient.MessageReceived += MessageReceivedAsync;
+            discordShardedClient.MessageReceived += MessageReceivedAsync;
         }
 
-        private async Task MessageReceivedAsync(SocketMessage rawMessage)
+        public static async Task InitializeAsync()
         {
-            // ensures we don't process system/other bot messages
-            if (!(rawMessage is SocketUserMessage message))
-            {
-                return;
-            }
+            // register modules that are public and inherit ModuleBase<T>.
+            await commandService.AddModulesAsync(Assembly.GetEntryAssembly(), services);
+        }
+
+
+        private static async Task MessageReceivedAsync(SocketMessage socketMessage)
+        {
+            var message = socketMessage as SocketUserMessage;
 
             if (message.Source != MessageSource.User)
             {
                 return;
             }
 
+            var context = new ShardedCommandContext(discordShardedClient, message);
+
             // sets the argument position away from the prefix we set
-            var argPos = 0;
+            int argPos = 0;
 
             // get prefix from the configuration file
             char prefix = Char.Parse("?");
 
+            Console.WriteLine(context);
+
             // determine if the message has a valid prefix, and adjust argPos based on prefix
-            if (!(message.HasMentionPrefix(_client.CurrentUser, ref argPos) || message.HasCharPrefix(prefix, ref argPos)))
+            if (!(message.HasMentionPrefix(discordShardedClient.CurrentUser, ref argPos) || message.HasCharPrefix(prefix, ref argPos)))
             {
                 return;
             }
 
-            var context = new SocketCommandContext(_client, message);
+            
 
             // execute command if one is found that matches
-            await _commands.ExecuteAsync(context, argPos, _services);
+            await commandService.ExecuteAsync(context, argPos, services);
         }
 
-        private Task CommandExecutedAsync(Optional<CommandInfo> arg1, ICommandContext arg2, IResult arg3)
+        private async Task CommandExecutedAsync(Optional<CommandInfo> command, ICommandContext context, IResult result)
         {
-            throw new NotImplementedException();
+            // if a command isn't found, log that info to console and exit this method
+            if (!command.IsSpecified)
+            {
+                System.Console.WriteLine($"Command failed to execute for [] <-> []!");
+                return;
+            }
+
+
+            // log success to the console and exit this method
+            if (result.IsSuccess)
+            {
+                System.Console.WriteLine($"Command [] executed for -> []");
+                return;
+            }
+
+
+            // failure scenario, let's let the user know
+            await context.Channel.SendMessageAsync($"Sorry, ... something went wrong -> []!");
         }
+
 
 
 
