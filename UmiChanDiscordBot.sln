@@ -5,9 +5,7 @@ VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UmiChanBot", "UmiChanBot\UmiChanBot.csproj", "{7D7A3162-5ECE-4AC8-9CB9-CD33B469E9C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mamahiru.Terminal", "Mamahiru.Terminal\Mamahiru.Terminal.csproj", "{D125DC97-B64B-42A8-AD1E-8AD38184E0EA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mamahiru.Core", "Mamahiru.Core\Mamahiru.Core.csproj", "{6055496D-06D1-417F-B54D-03CBA9F9CAB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mamahiru.Terminal", "Mamahiru.Terminal\Mamahiru.Terminal.csproj", "{D125DC97-B64B-42A8-AD1E-8AD38184E0EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{D125DC97-B64B-42A8-AD1E-8AD38184E0EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D125DC97-B64B-42A8-AD1E-8AD38184E0EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D125DC97-B64B-42A8-AD1E-8AD38184E0EA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6055496D-06D1-417F-B54D-03CBA9F9CAB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6055496D-06D1-417F-B54D-03CBA9F9CAB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6055496D-06D1-417F-B54D-03CBA9F9CAB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6055496D-06D1-417F-B54D-03CBA9F9CAB1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

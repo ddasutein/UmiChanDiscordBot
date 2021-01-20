@@ -1,22 +1,20 @@
 ﻿using System;
-using Mamahiru.Core;
 
 namespace Mamahiru.Terminal
 {
-    public class Program
+    class Program
     {
-
-        public static void Main(string[] args)
+        static void Main(string[] args)
         {
+            
             try
             {
-                Launcher.MainAsync().GetAwaiter().GetResult();
+                new MainLauncher().StartAsync().GetAwaiter().GetResult();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
-
         }
 
     }
