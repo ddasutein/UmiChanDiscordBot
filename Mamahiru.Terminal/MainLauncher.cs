@@ -19,8 +19,22 @@ namespace Mamahiru.Terminal
         public static string Hello = "Hello World!";
         public string botname = "Mamahiru";
 
+        private bool IsInitialSetupComplete = false;
+
         public async Task StartAsync()
         {
+
+            // Before the Bot can start, check if the token has been set in the config file
+            JsonConfig.LoadJSON();
+            if (string.IsNullOrWhiteSpace(JsonConfig.settings.token))
+            {
+                do
+                {
+                    InitialSetup();
+
+                } while (IsInitialSetupComplete == false);
+            }
+
             //Configure services
             var services = new ServiceCollection()
                 .AddSingleton(new DiscordShardedClient(new DiscordSocketConfig
@@ -46,7 +60,6 @@ namespace Mamahiru.Terminal
             //Build services
             var serviceProvider = services.BuildServiceProvider();
 
-
             //Start the bot
             await serviceProvider.GetRequiredService<StartUpService>().StartAsync();
 
@@ -62,6 +75,18 @@ namespace Mamahiru.Terminal
             return Task.CompletedTask;
         }
 
- 
+
+        private void InitialSetup()
+        {
+            string token;
+            Console.WriteLine("Please enter your Discord Bot Token");
+            token = Console.ReadLine();
+            JsonConfig.settings.token = token;
+            JsonConfig.SaveJson();
+            Console.ReadKey();
+            IsInitialSetupComplete = true;
+
+        }
+
     }
 }
